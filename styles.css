@@ -133,3 +133,12 @@ body {
   .add-form-button:hover {
     opacity: 0.9;
   }
+  .delete-button{
+    margin-left: 5px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+  }
