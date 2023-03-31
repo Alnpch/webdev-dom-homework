@@ -26,6 +26,7 @@ for (const deleteButtonElement of deleteButtonElements) {
     comments.splice(index, 1);
     event.stopPropagation();
     renderComments();
+    initEventListeners();
   })
 }
 //ответ на коммент
@@ -140,5 +141,5 @@ likesCounter: 0,
 
 
 });
- renderComments();
+renderComments();
 initEventListeners();
