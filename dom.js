@@ -4,6 +4,34 @@ const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 
+// get
+const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    method: "GET",
+});
+fetchPromise.then((response) => {
+ 
+  
+  const jsonPromise = response.json();
+  
+  jsonPromise.then((responseData) => {
+  const appComments = responseData.comments.map((comment) => {
+  return {
+    name: comment.author.name,
+    date: comment.date,
+    text: comment.text,
+    likesCounter: comment.likesCounter,
+    
+  }
+  
+    })
+    comments = appComments;
+    renderComments();
+    console.log(comments);
+  });
+  
+});
+
+
 
 const initEventListeners = () => {
 const likeElements = document.querySelectorAll('.like-button'); 
@@ -42,25 +70,27 @@ for (const commentAnswer of commentElementsAnswer) {
 }
 
 // массив объектов
-const comments = [{
+let comments = [{
 name: 'Глеб Фокин',
 date:'12.02.22 12:18',
 text: 'Это будет первый комментарий на этой странице',
 likesCounter: 3,
+
 },
 {name: 'Варвара Н.',
 date:'13.02.22 19:22',
 text:'Мне нравится как оформлена эта страница! ❤',
 likesCounter:75,
- 
+
 },
 ];
 // рендер
 const renderComments = () =>{
 const commentsHtml = comments.map((comment, index) => {
-return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}">
+return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}"
+data-date= "${comment.date}" data-counter="${comment.likesCounter}">
       <div class="comment-header">
-        <div >${comment.name}</div>
+        <div>${comment.name}</div>
         <div>${comment.date}</div>
       </div>
       <div class="comment-body">
@@ -70,7 +100,7 @@ return ` <li class="comment" data-text="${comment.text}" data-name="${comment.na
       </div>
       <div class="comment-footer">
         <div class="likes">
-          <span  class="likes-counter">${comment.likesCounter}</span>
+          <span  class="likes-counter" data-counter="${comment.likesCounter}">${comment.likesCounter}</span>
           <button class="like-button" ></button>
         <button data-index='${index}' class="delete-button">Удалить</button>
         </div>
@@ -131,7 +161,30 @@ text: commentInputElement.value
 .replaceAll('"', "&quot;"),
 likesCounter: 0,
   });
+
+  // post
+  const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    method: "POST",
+    body: JSON.stringify({ 
+    name: nameInputElement.value,
+    text: commentInputElement.value,
+    })
+});
+
+fetchPromise.then((response) => {
+ 
   
+  const jsonPromise = response.json();
+  
+  jsonPromise.then((responseData) => {
+  
+    comments = responseData.comments;
+    renderComments();
+    initEventListeners();
+  });
+  
+});
+
  renderComments();
  initEventListeners();
     // пустой инпут
@@ -141,5 +194,6 @@ likesCounter: 0,
 
 
 });
+
 renderComments();
 initEventListeners();
