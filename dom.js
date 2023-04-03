@@ -19,13 +19,14 @@ fetchPromise.then((response) => {
     name: comment.author.name,
     date: comment.date,
     text: comment.text,
-    likesCounter: comment.likesCounter,
+    likesCounter: 0,
     
   }
   
     })
     comments = appComments;
     renderComments();
+    initEventListeners();
     console.log(comments);
   });
   
@@ -163,24 +164,52 @@ likesCounter: 0,
   });
 
   // post
-  const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+  const postPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "POST",
     body: JSON.stringify({ 
+    date: newDate,
     name: nameInputElement.value,
     text: commentInputElement.value,
+    likesCounter: 0,
     })
 });
 
+postPromise.then((response) => {
+ 
+  
+  const jsonPostPromise = response.json();
+  
+  jsonPostPromise.then((responseData) => {
+  
+    comments = responseData.comments;
+    renderComments();
+    initEventListeners();
+  });
+  
+});
+const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    method: "GET",
+});
 fetchPromise.then((response) => {
  
   
   const jsonPromise = response.json();
   
   jsonPromise.then((responseData) => {
+  const appComments = responseData.comments.map((comment) => {
+  return {
+    name: comment.author.name,
+    date: comment.date,
+    text: comment.text,
+    likesCounter: 0,
+    
+  }
   
-    comments = responseData.comments;
+    })
+    comments = appComments;
     renderComments();
     initEventListeners();
+    console.log(comments);
   });
   
 });
