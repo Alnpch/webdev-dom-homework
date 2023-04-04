@@ -17,7 +17,7 @@ fetchPromise.then((response) => {
   const appComments = responseData.comments.map((comment) => {
   return {
     name: comment.author.name,
-    date: comment.date,
+    date: data (comment.date) ,
     text: comment.text,
     likesCounter: 0,
     
@@ -112,6 +112,7 @@ commentsElement.innerHTML = commentsHtml;
 }
 
 // дата
+function data () {
 let myDate = new Date(); 
 const months = ["01", "02", "03", "04", "05", "06",
 "07", "08", "09", "10", "11", "12"];
@@ -130,7 +131,8 @@ if (minute < 10) {
 }
 let newDate = day  + "." + months[myDate.getMonth()] + "." 
 + year + " " + hour + ":" +  minute;
-
+return newDate;
+}
 
 // проверка инпута
 buttonElement.addEventListener("click", () => {
@@ -154,7 +156,7 @@ name: nameInputElement.value
 .replaceAll("<", "&lt;")
 .replaceAll(">", "&gt;")
 .replaceAll('"', "&quot;"),
-date: newDate,
+date: data (),
 text: commentInputElement.value
 .replaceAll("&", "&amp;")
 .replaceAll("<", "&lt;")
@@ -167,7 +169,7 @@ likesCounter: 0,
   const postPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "POST",
     body: JSON.stringify({ 
-    date: newDate,
+    date: data () ,
     name: nameInputElement.value,
     text: commentInputElement.value,
     likesCounter: 0,
@@ -180,14 +182,8 @@ postPromise.then((response) => {
   const jsonPostPromise = response.json();
   
   jsonPostPromise.then((responseData) => {
-  
-    comments = responseData.comments;
-    renderComments();
-    initEventListeners();
-  });
-  
-});
-const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    // второй Get
+    const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "GET",
 });
 fetchPromise.then((response) => {
@@ -199,12 +195,11 @@ fetchPromise.then((response) => {
   const appComments = responseData.comments.map((comment) => {
   return {
     name: comment.author.name,
-    date: comment.date,
+    date: data (),
     text: comment.text,
     likesCounter: 0,
     
   }
-  
     })
     comments = appComments;
     renderComments();
@@ -212,6 +207,10 @@ fetchPromise.then((response) => {
     console.log(comments);
   });
   
+});
+    comments = responseData.comments;
+    initEventListeners();
+  });
 });
 
  renderComments();
