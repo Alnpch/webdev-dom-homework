@@ -3,12 +3,20 @@ const commentsElement = document.getElementById("comments" );
 const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
+let addForm = document.getElementById("add-form");
+
+
+
 
 // get
-const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+const fetchAndRenderComments = () => {
+  let commentsLoading = document.createElement('div');
+commentsLoading.id = 'commentsLoading';
+commentsLoading.innerHTML = '<p>Комментарии загружается...</p>';
+commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
+ return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "GET",
-});
-fetchPromise.then((response) => {
+}).then((response) => {
  
   
   const jsonPromise = response.json();
@@ -30,10 +38,45 @@ fetchPromise.then((response) => {
     console.log(comments);
   });
   
-});
+}).then(() => {
+  return commentsLoading.parentNode.replaceChild(commentsElement, commentsLoading);
+  
+}) 
+};
+// второй get
+const fetchAndRenderCommentsTwo = () => {
+  
+ return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    method: "GET",
+}).then((response) => {
+ 
+  
+  const jsonPromise = response.json();
+  
+  jsonPromise.then((responseData) => {
+  const appComments = responseData.comments.map((comment) => {
+  return {
+    name: comment.author.name,
+    date: data (comment.date) ,
+    text: comment.text,
+    likesCounter: 0,
+    
+  }
+  
+    })
+    comments = appComments;
+    renderComments();
+    initEventListeners();
+    console.log(comments);
+  });
+  
+})
+}
 
 
 
+fetchAndRenderComments();
+fetchAndRenderCommentsTwo();
 const initEventListeners = () => {
 const likeElements = document.querySelectorAll('.like-button'); 
 const deleteButtonElements = document.querySelectorAll('.delete-button');
@@ -164,9 +207,13 @@ text: commentInputElement.value
 .replaceAll('"', "&quot;"),
 likesCounter: 0,
   });
-
+ let addFormLoading = document.createElement('div');
+ addFormLoading.id = 'addFormLoading';
+ addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
+ addForm.parentNode.replaceChild(addFormLoading, addForm);
+ 
   // post
-  const postPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+  fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "POST",
     body: JSON.stringify({ 
     date: data () ,
@@ -174,44 +221,15 @@ likesCounter: 0,
     text: commentInputElement.value,
     likesCounter: 0,
     })
-});
-
-postPromise.then((response) => {
+}).then((response) => {
+ return response.json();
+  
+}).then(() => {
+ return fetchAndRenderCommentsTwo();
+}).then(() =>{
+  return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
  
-  
-  const jsonPostPromise = response.json();
-  
-  jsonPostPromise.then((responseData) => {
-    // второй Get
-    const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
-    method: "GET",
-});
-fetchPromise.then((response) => {
- 
-  
-  const jsonPromise = response.json();
-  
-  jsonPromise.then((responseData) => {
-  const appComments = responseData.comments.map((comment) => {
-  return {
-    name: comment.author.name,
-    date: data (),
-    text: comment.text,
-    likesCounter: 0,
-    
-  }
-    })
-    comments = appComments;
-    renderComments();
-    initEventListeners();
-    console.log(comments);
-  });
-  
-});
-    comments = responseData.comments;
-    initEventListeners();
-  });
-});
+})
 
  renderComments();
  initEventListeners();
