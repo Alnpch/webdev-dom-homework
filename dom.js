@@ -128,6 +128,21 @@ likesCounter:75,
 
 },
 ];
+// рендер нового коммента
+comments.push({
+  name: nameInputElement.value
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;"),
+  date: data (),
+  text: commentInputElement.value
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;"),
+  likesCounter: 0,
+    });
 // рендер
 const renderComments = () =>{
 const commentsHtml = comments.map((comment, index) => {
@@ -152,6 +167,7 @@ data-date= "${comment.date}" data-counter="${comment.likesCounter}">
     </li>`;
 }).join(''); 
 commentsElement.innerHTML = commentsHtml;
+
 }
 
 // дата
@@ -192,21 +208,7 @@ buttonElement.addEventListener("click", () => {
     commentInputElement.classList.add('error');
     return;
   }
-// рендер нового коммента
-comments.push({
-name: nameInputElement.value
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;"),
-date: data (),
-text: commentInputElement.value
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;"),
-likesCounter: 0,
-  });
+
  let addFormLoading = document.createElement('div');
  addFormLoading.id = 'addFormLoading';
  addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
