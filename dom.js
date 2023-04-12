@@ -17,10 +17,7 @@ commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
  return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
     method: "GET",
 }).then((response) => {
- 
-  
   const jsonPromise = response.json();
-  
   jsonPromise.then((responseData) => {
   const appComments = responseData.comments.map((comment) => {
   return {
@@ -41,7 +38,11 @@ commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
 }).then(() => {
   return commentsLoading.parentNode.replaceChild(commentsElement, commentsLoading);
   
-}) 
+}).catch((error) =>{
+  
+alert('Кажется, у вас сломался интернет, попробуйте позже');
+console.warn(error);
+}); 
 };
 // второй get
 const fetchAndRenderCommentsTwo = () => {
@@ -222,22 +223,37 @@ buttonElement.addEventListener("click", () => {
     name: nameInputElement.value,
     text: commentInputElement.value,
     likesCounter: 0,
+    forceError: true,
     })
 }).then((response) => {
- return response.json();
+  if (response.status === 201) {
+    nameInputElement.value = "" ;
+  commentInputElement.value = "" ;
+    return response.json();
+  }
+  if (response.status === 500) {
+    throw new Error('Сервер сломался, попробуй позже');
+  } if (response.status === 400) {
+    alert("Имя и комментарий должны быть не короче 3 символов");
   
+  }
 }).then(() => {
  return fetchAndRenderCommentsTwo();
-}).then(() =>{
+
+}).then(() => {
   return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
- 
-})
+
+}).catch((error) =>{
+  addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
+alert('Кажется, у вас сломался интернет, попробуйте позже');
+console.warn(error);
+
+});
 
  renderComments();
  initEventListeners();
     // пустой инпут
-    nameInputElement.value = "" ;
-    commentInputElement.value = "" ; 
+    
  
 
 
