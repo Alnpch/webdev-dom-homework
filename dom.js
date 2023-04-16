@@ -1,84 +1,20 @@
+import {renderComments} from "./render.js";
+import{fetchAndRenderComments, fetchAndRenderCommentsTwo, postAndRenderComments} from "./api.js";
 const buttonElement = document.getElementById("add-button");
 const commentsElement = document.getElementById("comments" ); 
 const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 let addForm = document.getElementById("add-form");
-
-
-
-
 // get
-const fetchAndRenderComments = () => {
-  let commentsLoading = document.createElement('div');
-commentsLoading.id = 'commentsLoading';
-commentsLoading.innerHTML = '<p>Комментарии загружается...</p>';
-commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
- return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
-    method: "GET",
-}).then((response) => {
-  const jsonPromise = response.json();
-  jsonPromise.then((responseData) => {
-  const appComments = responseData.comments.map((comment) => {
-  return {
-    name: comment.author.name,
-    date: data (comment.date) ,
-    text: comment.text,
-    likesCounter: 0,
-    
-  }
-  
-    })
-    comments = appComments;
-    renderComments();
-    initEventListeners();
-    console.log(comments);
-  });
-  
-}).then(() => {
-  return commentsLoading.parentNode.replaceChild(commentsElement, commentsLoading);
-  
-}).catch((error) =>{
-  
-alert('Кажется, у вас сломался интернет, попробуйте позже');
-console.warn(error);
-}); 
-};
-// второй get
-const fetchAndRenderCommentsTwo = () => {
-  
- return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
-    method: "GET",
-}).then((response) => {
- 
-  
-  const jsonPromise = response.json();
-  
-  jsonPromise.then((responseData) => {
-  const appComments = responseData.comments.map((comment) => {
-  return {
-    name: comment.author.name,
-    date: data (comment.date) ,
-    text: comment.text,
-    likesCounter: 0,
-    
-  }
-  
-    })
-    comments = appComments;
-    renderComments();
-    initEventListeners();
-    console.log(comments);
-  });
-  
-})
-}
 
+// второй get
 
 
 fetchAndRenderComments();
 fetchAndRenderCommentsTwo();
-const initEventListeners = () => {
+
+export const initEventListeners = () => {
 const likeElements = document.querySelectorAll('.like-button'); 
 const deleteButtonElements = document.querySelectorAll('.delete-button');
 // кнопка лайка
@@ -113,22 +49,23 @@ for (const commentAnswer of commentElementsAnswer) {
   })
 }
 }
-
 // массив объектов
-let comments = [{
-name: 'Глеб Фокин',
-date:'12.02.22 12:18',
-text: 'Это будет первый комментарий на этой странице',
-likesCounter: 3,
+export let comments = [{
+  name: 'Глеб Фокин',
+  date:'12.02.22 12:18',
+  text: 'Это будет первый комментарий на этой странице',
+  likesCounter: 3,
+  
+  },
+  {name: 'Варвара Н.',
+  date:'13.02.22 19:22',
+  text:'Мне нравится как оформлена эта страница! ❤',
+  likesCounter:75,
+  
+  },
+  ];
+renderComments();
 
-},
-{name: 'Варвара Н.',
-date:'13.02.22 19:22',
-text:'Мне нравится как оформлена эта страница! ❤',
-likesCounter:75,
-
-},
-];
 // рендер нового коммента
 comments.push({
   name: nameInputElement.value
@@ -144,35 +81,10 @@ comments.push({
   .replaceAll('"', "&quot;"),
   likesCounter: 0,
     });
-// рендер
-const renderComments = () =>{
-const commentsHtml = comments.map((comment, index) => {
-return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}"
-data-date= "${comment.date}" data-counter="${comment.likesCounter}">
-      <div class="comment-header">
-        <div>${comment.name}</div>
-        <div>${comment.date}</div>
-      </div>
-      <div class="comment-body">
-        <div  class="comment-text" >
-         ${comment.text}
-        </div>
-      </div>
-      <div class="comment-footer">
-        <div class="likes">
-          <span  class="likes-counter" data-counter="${comment.likesCounter}">${comment.likesCounter}</span>
-          <button class="like-button" ></button>
-        <button data-index='${index}' class="delete-button">Удалить</button>
-        </div>
-      </div>
-    </li>`;
-}).join(''); 
-commentsElement.innerHTML = commentsHtml;
-
-}
+//
 
 // дата
-function data () {
+export function data () {
 let myDate = new Date(); 
 const months = ["01", "02", "03", "04", "05", "06",
 "07", "08", "09", "10", "11", "12"];
@@ -210,46 +122,14 @@ buttonElement.addEventListener("click", () => {
     return;
   }
 
- let addFormLoading = document.createElement('div');
- addFormLoading.id = 'addFormLoading';
- addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
- addForm.parentNode.replaceChild(addFormLoading, addForm);
+  
+ 
+
+
  
   // post
-  fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
-    method: "POST",
-    body: JSON.stringify({ 
-    date: data () ,
-    name: nameInputElement.value,
-    text: commentInputElement.value,
-    likesCounter: 0,
-    forceError: true,
-    })
-}).then((response) => {
-  if (response.status === 201) {
-    nameInputElement.value = "" ;
-  commentInputElement.value = "" ;
-    return response.json();
-  }
-  if (response.status === 500) {
-    throw new Error('Сервер сломался, попробуй позже');
-  } if (response.status === 400) {
-    alert("Имя и комментарий должны быть не короче 3 символов");
   
-  }
-}).then(() => {
- return fetchAndRenderCommentsTwo();
-
-}).then(() => {
-  return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
-
-}).catch((error) =>{
-  addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
-alert('Кажется, у вас сломался интернет, попробуйте позже');
-console.warn(error);
-
-});
-
+postAndRenderComments();
  renderComments();
  initEventListeners();
     // пустой инпут
