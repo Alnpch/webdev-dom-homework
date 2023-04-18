@@ -25,9 +25,12 @@ export const renderComments = () =>{
           </div>
         </li>`;
     }).join(''); 
+    
     initEventListeners();
    
     commentsElement.innerHTML = commentsHtml;
     
+
     } 
-   
+
+ 

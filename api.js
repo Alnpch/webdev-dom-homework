@@ -1,10 +1,11 @@
 let addForm = document.getElementById("add-form");
-import { comments } from "./dom.js";
+const nameInputElement = document.getElementById("name-input" );
+const commentInputElement = document.getElementById("comment-input" );
 import {initEventListeners}from "./dom.js";
 import{data}from "./dom.js";
-import{renderComments}from "./render.js";
 const commentsElement = document.getElementById("comments" );
-
+import{renderComments}from "./render.js";
+let comments = [];
 export const fetchAndRenderComments = () => {
     let commentsLoading = document.createElement('div');
   commentsLoading.id = 'commentsLoading';
@@ -108,3 +109,4 @@ export const fetchAndRenderComments = () => {
    
    });
    } 
+   

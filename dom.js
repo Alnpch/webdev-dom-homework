@@ -65,24 +65,22 @@ export let comments = [{
   },
   ];
 renderComments();
-
-// рендер нового коммента
-comments.push({
-  name: nameInputElement.value
-  .replaceAll("&", "&amp;")
-  .replaceAll("<", "&lt;")
-  .replaceAll(">", "&gt;")
-  .replaceAll('"', "&quot;"),
-  date: data (),
-  text: commentInputElement.value
-  .replaceAll("&", "&amp;")
-  .replaceAll("<", "&lt;")
-  .replaceAll(">", "&gt;")
-  .replaceAll('"', "&quot;"),
-  likesCounter: 0,
-    });
-//
-
+   // рендер нового коммента
+   comments.push({
+    name: nameInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    date: data (),
+    text: commentInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    likesCounter: 0,
+      });
+      
 // дата
 export function data () {
 let myDate = new Date(); 
@@ -122,7 +120,7 @@ buttonElement.addEventListener("click", () => {
     return;
   }
 
-  
+ 
  
 
 
@@ -133,7 +131,7 @@ postAndRenderComments();
  renderComments();
  initEventListeners();
     // пустой инпут
-    
+     
  
 
 
