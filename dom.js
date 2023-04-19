@@ -1,12 +1,13 @@
 import {renderComments} from "./render.js";
-
+import{getCommentsLoading,getComments, postComments} from "./api.js";
 const buttonElement = document.getElementById("add-button");
 const commentsElement = document.getElementById("comments" ); 
 const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 let addForm = document.getElementById("add-form");
-import{getCommentsLoading,getComments, postComments} from "./api.js";
+let host = "https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments";
+
 // get
 export const fetchAndRenderComments = () => {
   let commentsLoading = document.createElement('div');
@@ -21,10 +22,10 @@ export const fetchAndRenderCommentsTwo = () => {
 return getComments();
    }
   
- 
-
 fetchAndRenderComments();
 fetchAndRenderCommentsTwo(); 
+
+
 export const initEventListeners = () => {
 const likeElements = document.querySelectorAll('.like-button'); 
 const deleteButtonElements = document.querySelectorAll('.delete-button');
@@ -165,8 +166,7 @@ console.warn(error);
 });
 
  } 
- console.log(nameInputElement.value)
- console.log(commentInputElement.value)
+
  postAndRenderComments();
   renderComments();
   initEventListeners();
@@ -178,3 +178,5 @@ console.warn(error);
  
 renderComments();
 initEventListeners();
+console.log(nameInputElement.value)
+console.log(commentInputElement.value)

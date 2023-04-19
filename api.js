@@ -1,16 +1,14 @@
+import {initEventListeners}from "./dom.js";
+import{data}from "./dom.js";
+import{renderComments}from "./render.js";
+const commentsElement = document.getElementById("comments" );
 let addForm = document.getElementById("add-form");
 const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
-import {initEventListeners}from "./dom.js";
-import{data}from "./dom.js";
-const commentsElement = document.getElementById("comments" );
-import{renderComments}from "./render.js";
-
-
-
+let host = "https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments";
 export function getCommentsLoading(comments) {
     
-    return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    return fetch(host, {
     method: "GET",
 }).then((response) => {
   const jsonPromise = response.json();
@@ -43,7 +41,7 @@ console.warn(error);
 }
 //2get
 export function getComments(comments) {
-    return fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+    return fetch(host, {
      method: "GET",
  }).then((response) => {
    const jsonPromise = response.json();
@@ -67,8 +65,8 @@ export function getComments(comments) {
    
  })  
 }
-export function postComments() {
-    return   fetch("https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments", {
+export function postComments(nameInputElement,commentInputElement) {
+    return   fetch(host, {
         method: "POST",
         body: JSON.stringify({ 
         date: data () ,
@@ -78,5 +76,5 @@ export function postComments() {
         
         })
     })
+      
 }
-   
