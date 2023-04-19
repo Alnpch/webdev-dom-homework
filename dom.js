@@ -1,19 +1,30 @@
 import {renderComments} from "./render.js";
-import{fetchAndRenderComments, fetchAndRenderCommentsTwo, postAndRenderComments} from "./api.js";
+
 const buttonElement = document.getElementById("add-button");
 const commentsElement = document.getElementById("comments" ); 
 const nameInputElement = document.getElementById("name-input" );
 const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 let addForm = document.getElementById("add-form");
+import{getCommentsLoading,getComments, postComments} from "./api.js";
 // get
+export const fetchAndRenderComments = () => {
+  let commentsLoading = document.createElement('div');
+commentsLoading.id = 'commentsLoading';
+commentsLoading.innerHTML = '<p>Комментарии загружается...</p>';
+commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
+ return getCommentsLoading();
+};
 
 // второй get
-
+export const fetchAndRenderCommentsTwo = () => {
+return getComments();
+   }
+  
+ 
 
 fetchAndRenderComments();
-fetchAndRenderCommentsTwo();
-
+fetchAndRenderCommentsTwo(); 
 export const initEventListeners = () => {
 const likeElements = document.querySelectorAll('.like-button'); 
 const deleteButtonElements = document.querySelectorAll('.delete-button');
@@ -64,23 +75,8 @@ export let comments = [{
   
   },
   ];
-renderComments();
-   // рендер нового коммента
-   comments.push({
-    name: nameInputElement.value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;"),
-    date: data (),
-    text: commentInputElement.value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;"),
-    likesCounter: 0,
-      });
-      
+  
+  
 // дата
 export function data () {
 let myDate = new Date(); 
@@ -119,23 +115,66 @@ buttonElement.addEventListener("click", () => {
     commentInputElement.classList.add('error');
     return;
   }
-
- 
- 
-
-
- 
+  // рендер нового коммента
+  comments.push({
+    name: nameInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    date: data (),
+    text: commentInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    likesCounter: 0,
+      });
+      
   // post
-  
-postAndRenderComments();
- renderComments();
- initEventListeners();
-    // пустой инпут
-     
- 
+const postAndRenderComments = () => {
+  let addFormLoading = document.createElement('div');
+  addFormLoading.id = 'addFormLoading';
+  addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
+  addForm.parentNode.replaceChild(addFormLoading, addForm);
 
+return postComments()
+.then((response) => {
+  if (response.status === 201) {
+  nameInputElement.value = "" ;
+  commentInputElement.value = "" ;
+    return response.json();
+  }
+  if (response.status === 500) {
+    throw new Error('Сервер сломался, попробуй позже');
+  } if (response.status === 400) {
+    alert("Имя и комментарий должны быть не короче 3 символов");
+  
+  }
+}).then(() => {
+ return fetchAndRenderCommentsTwo();
+
+}).then(() => {
+  return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
+
+}).catch((error) =>{
+  addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
+alert('Кажется, у вас сломался интернет, попробуйте позже');
+console.warn(error);
 
 });
 
+ } 
+ console.log(nameInputElement.value)
+ console.log(commentInputElement.value)
+ postAndRenderComments();
+  renderComments();
+  initEventListeners();
+  
+});
+
+
+
+ 
 renderComments();
 initEventListeners();
