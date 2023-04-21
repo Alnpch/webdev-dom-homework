@@ -1,9 +1,10 @@
 import {renderComments} from "./render.js";
-import{getCommentsLoading,getComments, postComments} from "./api.js";
+import{getCommentsLoading,getComments,postComments} from "./api.js";
+
 const buttonElement = document.getElementById("add-button");
 const commentsElement = document.getElementById("comments" ); 
-const nameInputElement = document.getElementById("name-input" );
-const commentInputElement = document.getElementById("comment-input" );
+export const nameInputElement = document.getElementById("name-input" );
+export const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 let addForm = document.getElementById("add-form");
 let host = "https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments";
@@ -131,7 +132,7 @@ buttonElement.addEventListener("click", () => {
     .replaceAll('"', "&quot;"),
     likesCounter: 0,
       });
-      
+       
   // post
 const postAndRenderComments = () => {
   let addFormLoading = document.createElement('div');
@@ -139,26 +140,15 @@ const postAndRenderComments = () => {
   addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
   addForm.parentNode.replaceChild(addFormLoading, addForm);
 
-return postComments()
-.then((response) => {
-  if (response.status === 201) {
-  nameInputElement.value = "" ;
-  commentInputElement.value = "" ;
-    return response.json();
-  }
-  if (response.status === 500) {
-    throw new Error('Сервер сломался, попробуй позже');
-  } if (response.status === 400) {
-    alert("Имя и комментарий должны быть не короче 3 символов");
-  
-  }
-}).then(() => {
- return fetchAndRenderCommentsTwo();
-
-}).then(() => {
+return postComments({nameInputElement,commentInputElement})
+.then(() => {
   return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
 
-}).catch((error) =>{
+}).then(() => {
+  return fetchAndRenderCommentsTwo();
+ 
+ })
+.catch((error) =>{
   addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
 alert('Кажется, у вас сломался интернет, попробуйте позже');
 console.warn(error);
@@ -178,5 +168,5 @@ console.warn(error);
  
 renderComments();
 initEventListeners();
-console.log(nameInputElement.value)
-console.log(commentInputElement.value)
+
+ 

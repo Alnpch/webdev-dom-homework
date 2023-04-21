@@ -1,10 +1,10 @@
 import {initEventListeners}from "./dom.js";
 import{data}from "./dom.js";
 import{renderComments}from "./render.js";
+
 const commentsElement = document.getElementById("comments" );
 let addForm = document.getElementById("add-form");
-const nameInputElement = document.getElementById("name-input" );
-const commentInputElement = document.getElementById("comment-input" );
+
 let host = "https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments";
 export function getCommentsLoading(comments) {
     
@@ -65,7 +65,8 @@ export function getComments(comments) {
    
  })  
 }
-export function postComments(nameInputElement,commentInputElement) {
+
+export function postComments({nameInputElement,commentInputElement}) {
     return   fetch(host, {
         method: "POST",
         body: JSON.stringify({ 
@@ -75,6 +76,18 @@ export function postComments(nameInputElement,commentInputElement) {
         likesCounter: 0,
         
         })
-    })
-      
+    }).then((response) => {
+        if (response.status === 201) {
+        nameInputElement.value = "" ;
+        commentInputElement.value = "" ;
+          return response.json();
+        }
+        if (response.status === 500) {
+          throw new Error('Сервер сломался, попробуй позже');
+        } if (response.status === 400) {
+          alert("Имя и комментарий должны быть не короче 3 символов");
+        
+        }
+      })
+          
 }
