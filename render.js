@@ -1,13 +1,10 @@
-import { comments } from "./dom.js";
+
 import {initEventListeners}from "./dom.js";
-import{data}from "./dom.js";
-const nameInputElement = document.getElementById("name-input" );
-const commentInputElement = document.getElementById("comment-input" );
 const commentsElement = document.getElementById("comments" );
 
 // рендер
 export const renderComments = () =>{
-    const commentsHtml = comments.map((comment, index) => {
+    const commentsHtml = window.comments.map((comment, index) => {
     return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}"
     data-date= "${comment.date}" data-counter="${comment.likesCounter}">
           <div class="comment-header">

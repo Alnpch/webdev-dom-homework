@@ -3,8 +3,8 @@ import{getCommentsLoading,getComments,postComments} from "./api.js";
 
 const buttonElement = document.getElementById("add-button");
 const commentsElement = document.getElementById("comments" ); 
-export const nameInputElement = document.getElementById("name-input" );
-export const commentInputElement = document.getElementById("comment-input" );
+ const nameInputElement = document.getElementById("name-input" );
+ const commentInputElement = document.getElementById("comment-input" );
 const likes = document.querySelectorAll('.likes'); 
 let addForm = document.getElementById("add-form");
 let host = "https://webdev-hw-api.vercel.app/api/v1/alina-pitskhelauri/comments";
@@ -63,7 +63,7 @@ for (const commentAnswer of commentElementsAnswer) {
 }
 }
 // массив объектов
-export let comments = [{
+window.comments = [{
   name: 'Глеб Фокин',
   date:'12.02.22 12:18',
   text: 'Это будет первый комментарий на этой странице',
@@ -104,6 +104,8 @@ return newDate;
 
 // проверка инпута
 buttonElement.addEventListener("click", () => {
+  
+   
   nameInputElement.classList.remove('error');
 
   if (nameInputElement.value === '' ) {
@@ -131,8 +133,8 @@ buttonElement.addEventListener("click", () => {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;"),
     likesCounter: 0,
-      });
-       
+      }); 
+     
   // post
 const postAndRenderComments = () => {
   let addFormLoading = document.createElement('div');
@@ -140,7 +142,7 @@ const postAndRenderComments = () => {
   addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
   addForm.parentNode.replaceChild(addFormLoading, addForm);
 
-return postComments({nameInputElement,commentInputElement})
+return postComments(comments[comments.length - 1].name, comments[comments.length - 1].text)
 .then(() => {
   return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
 
@@ -157,13 +159,23 @@ console.warn(error);
 
  } 
 
+ 
  postAndRenderComments();
+ 
+ nameInputElement.value = '';
+ commentInputElement.value = '';
+ 
   renderComments();
   initEventListeners();
   
 });
 
 
+  
+ 
+ 
+  
+ 
 
  
 renderComments();
