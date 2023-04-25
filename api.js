@@ -28,7 +28,7 @@ export function getCommentsLoading(comments) {
    window .comments = appComments;
     renderComments();
     initEventListeners();
-    console.log(comments);
+    
   });
   
 }).then(() => {
@@ -61,7 +61,7 @@ export function getComments(comments) {
      window.comments = appComments;
      renderComments();
      initEventListeners();
-     console.log(comments);
+     
    });
    
  })  
